@@ -77,7 +77,7 @@ const Dashboard = () => {
       {/* Greeting */}
       <div className="mb-6">
         <h1 className="text-2xl font-bold text-gray-800 dark:text-white">
-          👋 Hello, Ashish
+          Hello, Ashish
         </h1>
         <p className="text-gray-600 dark:text-gray-300 text-sm mt-1">
           Here’s what’s happening today in your learning journey
@@ -109,7 +109,10 @@ const Dashboard = () => {
         {/* Upcoming Schedule */}
         <Card className="bg-white dark:bg-gray-800 col-span-2">
           <CardContent>
-            <Typography variant="h6" className="mb-4 text-gray-800 dark:text-white">
+            <Typography
+              variant="h6"
+              className="mb-4 text-gray-800 dark:text-white"
+            >
               📅 Upcoming Schedule
             </Typography>
             {schedule.map((item, i) => (
@@ -128,12 +131,19 @@ const Dashboard = () => {
         {/* Quick Actions */}
         <Card className="bg-white dark:bg-gray-800">
           <CardContent className="flex flex-col gap-3">
-            <Typography variant="h6" className="mb-2 text-gray-800 dark:text-white">
-              ⚡ Quick Actions
+            <Typography
+              variant="h6"
+              className="mb-2 text-gray-800 dark:text-white"
+            >
+              Quick Actions
             </Typography>
-            <Button variant="contained" color="primary">
+            <button
+              variant="contained"
+              color="primary "
+              className="bg-green-600 text-white py-2 rounded-lg uppercase"
+            >
               Join Next Live Class
-            </Button>
+            </button>
             <Button variant="outlined" color="secondary">
               Submit Assignment
             </Button>
@@ -186,7 +196,10 @@ const Dashboard = () => {
       {/* Recent Activity */}
       <Card className="bg-white dark:bg-gray-800 mb-8">
         <CardContent>
-          <Typography variant="h6" className="mb-3 text-gray-800 dark:text-white">
+          <Typography
+            variant="h6"
+            className="mb-3 text-gray-800 dark:text-white"
+          >
             🔔 Recent Activity
           </Typography>
           <ul className="space-y-2">

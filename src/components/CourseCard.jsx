@@ -50,6 +50,7 @@ const CourseCard = ({ course, enrolled = false }) => {
 
           <Link className="pt-4" to={`/courses/${course.id}`}>
             <Button
+            color="success"
               variant={enrolled ? "contained" : "outlined"}
               fullWidth
               className="mt-4"

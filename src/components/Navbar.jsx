@@ -31,7 +31,7 @@ const Navbar = () => {
   return (
     <div
       position="static"
-      className={`bg-gradient-to-b from-blue-600 to-blue-400 dark:from-gray-900 dark:to-gray-800 ${
+      className={`bg-gradient-to-l from-purple-500 to-purple-600 dark:from-gray-900 dark:to-gray-800 ${
         dark ? "dark" : ""
       }`}
     >
