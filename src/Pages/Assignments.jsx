@@ -128,16 +128,16 @@ export default function Assignments() {
 
   return (
     <div className="min-h-screen py-10 px-4 bg-gray-50">
-      <h1 className="text-3xl font-bold mb-8 text-gray-900">
-        📚 My Assignments
-      </h1>
-      <div className="mb-4">
+      <div className="mb-4 max-w-7xl mx-auto">
+        <h1 className="text-3xl font-bold mb-8 text-gray-900">
+          My Assignments
+        </h1>
         <input
           type="text"
           placeholder="Search by title or course..."
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
-          className="w-full px-4 py-2 border rounded-lg shadow-sm focus:outline-none focus:ring focus:border-blue-300"
+          className="w-2/4 px-4 py-3 border rounded-lg shadow-sm focus:outline-none focus:ring focus:border-blue-300"
         />
       </div>
 
@@ -148,17 +148,21 @@ export default function Assignments() {
             {statusIcons[selectedStatus]} {selectedStatus} Assignments
           </h2>
 
-          {assignmentList.length === 0 ? (
-            <p className="text-gray-500">No assignments found.</p>
-          ) : (
-            <ul className="space-y-4">
-              {assignmentList
-                .filter(
-                  (a) =>
-                    a.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-                    a.course.toLowerCase().includes(searchQuery.toLowerCase())
-                )
-                .map((a) => (
+          {(() => {
+            const filteredAssignments = assignmentList.filter(
+              (a) =>
+                a.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                a.course.toLowerCase().includes(searchQuery.toLowerCase())
+            );
+            if (assignmentList.length === 0) {
+              return <p className="text-gray-500">No assignments found.</p>;
+            }
+            if (filteredAssignments.length === 0) {
+              return <p className="text-gray-500">No data found.</p>;
+            }
+            return (
+              <ul className="space-y-4">
+                {filteredAssignments.map((a) => (
                   <li
                     key={a.id}
                     className="bg-gray-100 hover:bg-gray-200 rounded-xl px-6 py-4 flex flex-col md:flex-row justify-between items-start md:items-center shadow-sm transition"
@@ -182,8 +186,9 @@ export default function Assignments() {
                     </div>
                   </li>
                 ))}
-            </ul>
-          )}
+              </ul>
+            );
+          })()}
         </div>
 
         {/* Sidebar */}
@@ -208,21 +213,25 @@ export default function Assignments() {
                 <div
                   key={status}
                   onClick={() => setSelectedStatus(status)}
-                  className={`flex items-center justify-between cursor-pointer px-4 py-3 rounded-lg border transition ${
+                  className={`flex items-center justify-between cursor-pointer px-4 py-3 rounded-lg border transition transform duration-200 ${
                     isActive
-                      ? `bg-${baseColor}-100 border-${baseColor}-400`
-                      : "bg-gray-50 border-gray-200"
+                      ? `bg-${baseColor}-100 border-${baseColor}-400 ring-2 ring-${baseColor}-500 scale-105`
+                      : "bg-gray-50 border-gray-200 hover:bg-gray-100"
                   }`}
                 >
                   <div
-                    className={`flex items-center gap-2 text-${baseColor}-700`}
+                    className={`flex items-center gap-2 ${
+                      isActive
+                        ? `text-${baseColor}-800 font-semibold`
+                        : `text-${baseColor}-700`
+                    }`}
                   >
                     {statusIcons[status]} <span>{status}</span>
                   </div>
                   <span
                     className={`text-xs font-semibold px-2 py-1 rounded-full bg-${baseColor}-200 text-${baseColor}-800`}
                   >
-                    {categorizedAssignments[status]?.length}
+                    {categorizedAssignments[status]?.length || 0}
                   </span>
                 </div>
               );
