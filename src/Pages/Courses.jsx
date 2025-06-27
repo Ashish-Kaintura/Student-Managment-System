@@ -95,7 +95,7 @@ const Courses = () => {
         variant="h5"
         className="font-bold mb-4 text-gray-800 dark:text-white"
       >
-        🎓 Enrolled Courses
+         Enrolled Courses
       </Typography>
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-10">
         {enrolledCourses.map((course) => (

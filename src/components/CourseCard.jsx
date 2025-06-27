@@ -16,22 +16,38 @@ const CourseCard = ({ course, enrolled = false }) => {
       arrow
       placement="top"
       title={
-        enrolled
-          ? ""
-          : <>
-              <p><strong>Role:</strong> {course.role}</p>
-              <p><strong>Category:</strong> {course.category}</p>
-              <p><strong>Description:</strong> {course.description}</p>
-            </>
+        enrolled ? (
+          ""
+        ) : (
+          <>
+            <div className="text-lg">
+              <p>
+                <strong>Role:</strong> {course.role}
+              </p>
+              <p>
+                <strong>Category:</strong> {course.category}
+              </p>
+              <p>
+                <strong>Description:</strong> {course.description}
+              </p>
+            </div>
+          </>
+        )
       }
     >
       <Card className="bg-white dark:bg-gray-800 shadow-md hover:shadow-lg transition-all rounded-xl">
         <CardContent className="flex flex-col justify-between h-full">
           <div>
-            <Typography variant="h6" className="font-semibold text-gray-800 dark:text-white">
+            <Typography
+              variant="h6"
+              className="font-semibold text-gray-800 dark:text-white"
+            >
               {course.title}
             </Typography>
-            <Typography variant="body2" className="text-gray-600 dark:text-gray-300 mb-2">
+            <Typography
+              variant="body2"
+              className="text-gray-600 dark:text-gray-300 mb-2"
+            >
               by {course.instructor}
             </Typography>
 
@@ -43,14 +59,16 @@ const CourseCard = ({ course, enrolled = false }) => {
                   color="success"
                   size={40}
                 />
-                <Typography variant="body2">{course.progress}% Completed</Typography>
+                <Typography variant="body2">
+                  {course.progress}% Completed
+                </Typography>
               </Box>
             )}
           </div>
 
           <Link className="pt-4" to={`/courses/${course.id}`}>
             <Button
-            color="success"
+              color="success"
               variant={enrolled ? "contained" : "outlined"}
               fullWidth
               className="mt-4"

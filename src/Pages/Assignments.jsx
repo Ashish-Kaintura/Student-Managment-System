@@ -171,7 +171,7 @@ export default function Assignments() {
                       <p className="text-lg font-semibold text-gray-800">
                         {a.title}
                       </p>
-                      <p className="text-sm text-gray-600">{a.course}</p>
+                      <p className="text-lg text-gray-600">Course: {a.course}</p>
                       <span className="text-sm text-gray-500">
                         Due: {a.due}
                       </span>
@@ -247,7 +247,7 @@ export default function Assignments() {
         maxWidth="sm"
         fullWidth
       >
-        <DialogTitle>📄 Assignment Details</DialogTitle>
+        <DialogTitle>Assignment Details</DialogTitle>
         <DialogContent dividers>
           {selectedAssignment && (
             <>

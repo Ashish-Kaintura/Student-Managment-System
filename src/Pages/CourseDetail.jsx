@@ -4,17 +4,18 @@ import {
   LinearProgress,
   Typography,
   Chip,
-  Card,
-  CardContent,
-  Divider,
-  Box,
   Button,
-  Checkbox,
-  FormControlLabel,
+  Collapse,
+  IconButton,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogActions,
 } from "@mui/material";
-import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import AccessTimeIcon from "@mui/icons-material/AccessTime";
 import DownloadIcon from "@mui/icons-material/Download";
+import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+import ExpandLessIcon from "@mui/icons-material/ExpandLess";
 
 const dummyCourses = {
   1: {
@@ -31,10 +32,9 @@ const dummyCourses = {
         title: "Introduction to React",
         description: "Understand what React is and why it's useful.",
         thumbnail:
-          "https://media.licdn.com/dms/image/v2/D4D12AQFCl1qqc4AhPg/article-cover_image-shrink_720_1280/article-cover_image-shrink_720_1280/0/1711732902781?e=2147483647&v=beta&t=Lm-yRroL8cE6lY2OqeTT8CQFqqpWXJ1kAsLnKRAhY4w",
+          "https://media.licdn.com/dms/image/D4D12AQFCl1qqc4AhPg/article-cover_image-shrink_720_1280/0/1711732902781?e=2147483647&v=beta&t=Lm-yRroL8cE6lY2OqeTT8CQFqqpWXJ1kAsLnKRAhY4w",
         videoUrl: "https://www.youtube.com/embed/N3AkSS5hXMA",
         status: "completed",
-        isChecked: true,
         materialUrl: "https://example.com/react-intro-materials.pdf",
       },
       {
@@ -44,7 +44,6 @@ const dummyCourses = {
           "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRZ70lRtF7wXP7tZNeYnlbb29tzyNPCMwdBVw&s",
         videoUrl: "https://www.youtube.com/embed/0riHps91AzE",
         status: "in-progress",
-        isChecked: false,
         materialUrl: "https://example.com/jsx-materials.pdf",
       },
       {
@@ -52,177 +51,171 @@ const dummyCourses = {
         description: "Understand component communication and state handling.",
         thumbnail:
           "https://miro.medium.com/v2/resize:fit:1200/0*wGaUQvXc4HymloHn.jpg",
-        videoUrl: "https://www.youtube.com/embed/35lXWvCuM8o",
+        videoUrl: null,
         status: "locked",
-        isChecked: false,
         materialUrl: null,
       },
     ],
   },
 };
 
-const CourseDetail = () => {
+export default function CourseDetail() {
   const { id } = useParams();
-  const [syllabus, setSyllabus] = useState(dummyCourses[id]?.syllabus || []);
   const course = dummyCourses[id];
+  const [expandedIndex, setExpandedIndex] = useState(null);
+  const [videoModalOpen, setVideoModalOpen] = useState(false);
+  const [activeVideoUrl, setActiveVideoUrl] = useState(null);
 
-  const handleCheckboxToggle = (index) => {
-    const updated = [...syllabus];
-    updated[index].isChecked = !updated[index].isChecked;
-    setSyllabus(updated);
+  const handleOpenVideoModal = (url) => {
+    setActiveVideoUrl(url);
+    setVideoModalOpen(true);
   };
 
-  if (!course) {
-    return <p className="text-red-500 text-lg">Course not found.</p>;
-  }
+  const handleCloseVideoModal = () => {
+    setVideoModalOpen(false);
+    setActiveVideoUrl(null);
+  };
+
+  if (!course) return <p className="text-red-500 text-lg">Course not found.</p>;
+
+  const toggleExpand = (index) => {
+    setExpandedIndex((prev) => (prev === index ? null : index));
+  };
 
   return (
-    <div className="p-4 max-w-4xl mx-auto">
-      <Card className="bg-white dark:bg-gray-800 shadow">
-        <CardContent>
-          <Typography
-            variant="h4"
-            className="font-bold mb-2 text-gray-800 dark:text-white"
-          >
-            {course.title}
-          </Typography>
+    <div className="max-w-6xl mx-auto p-6">
+      {/* Header */}
+      <div className="bg-white shadow-md rounded-xl p-6 mb-6">
+        <h1 className="text-3xl font-bold text-gray-800">{course.title}</h1>
+        <p className="text-sm text-gray-600 mb-2">
+          Instructor: {course.instructor}
+        </p>
+        <div className="flex flex-wrap gap-2 mb-4">
+          <Chip label={course.category} color="primary" size="small" />
+          <Chip
+            icon={<AccessTimeIcon fontSize="small" />}
+            label={course.duration}
+            size="small"
+          />
+          {course.tags.map((tag, i) => (
+            <Chip key={i} label={tag} variant="outlined" size="small" />
+          ))}
+        </div>
+        <p className="text-gray-700 mb-4">{course.description}</p>
+        <div>
+          <p className="text-sm text-gray-500 mb-1">Progress:</p>
+          <LinearProgress
+            variant="determinate"
+            value={course.progress}
+            sx={{ height: 10, borderRadius: 5 }}
+          />
+          <p className="text-sm text-blue-600 mt-1">
+            {course.progress}% completed
+          </p>
+        </div>
+      </div>
 
-          <Typography
-            variant="subtitle1"
-            className="text-gray-500 dark:text-gray-300 mb-2"
-          >
-            Instructor: {course.instructor}
-          </Typography>
-
-          <div className="flex items-center gap-2 mb-4 flex-wrap">
-            <Chip label={course.category} color="primary" size="small" />
-            <Chip
-              icon={<AccessTimeIcon fontSize="small" />}
-              label={course.duration}
-              variant="outlined"
-              size="small"
-            />
-            {course.tags.map((tag, i) => (
-              <Chip
-                key={i}
-                label={tag}
-                variant="outlined"
-                size="small"
-                className="dark:text-white"
-              />
-            ))}
-          </div>
-
-          <Typography className="text-gray-700 dark:text-gray-200 mb-4">
-            {course.description}
-          </Typography>
-
-          <div className="mb-4">
-            <Typography
-              variant="body2"
-              className="text-gray-600 dark:text-gray-300 mb-1"
+      {/* Syllabus */}
+      <div className="space-y-4">
+        <h2 className="text-2xl font-semibold text-gray-800">Syllabus</h2>
+        {course.syllabus.map((item, i) => (
+          <div key={i} className="bg-white border rounded-xl shadow p-4">
+            {/* Header with toggle */}
+            <div
+              className="flex justify-between items-center cursor-pointer"
+              onClick={() => toggleExpand(i)}
             >
-              Your Progress
-            </Typography>
-            <LinearProgress
-              variant="determinate"
-              value={course.progress}
-              sx={{ height: 10, borderRadius: 4 }}
-              color={course.progress >= 80 ? "success" : "primary"}
-            />
-            <p className="text-sm text-blue-600 mt-1">
-              {course.progress}% completed
-            </p>
-          </div>
+              <div>
+                <h3 className="text-lg font-semibold text-gray-800">
+                  {i + 1}. {item.title}
+                </h3>
+                <Chip
+                  label={
+                    item.status === "completed"
+                      ? "Completed"
+                      : item.status === "in-progress"
+                      ? "In Progress"
+                      : "Locked"
+                  }
+                  color={
+                    item.status === "completed"
+                      ? "success"
+                      : item.status === "in-progress"
+                      ? "warning"
+                      : "default"
+                  }
+                  size="small"
+                  className="mt-1"
+                />
+              </div>
+              <IconButton size="small">
+                {expandedIndex === i ? <ExpandLessIcon /> : <ExpandMoreIcon />}
+              </IconButton>
+            </div>
 
-          <Divider className="my-6" />
-
-          <Typography
-            variant="h6"
-            className="mb-3 text-gray-800 dark:text-white"
-          >
-            Syllabus
-          </Typography>
-
-          <div className="space-y-4">
-            {syllabus.map((item, index) => (
-              <div
-                key={index}
-                className="bg-gray-50 dark:bg-gray-700 rounded-lg p-4 flex flex-col sm:flex-row items-start gap-4 shadow"
-              >
+            {/* Collapsible body */}
+            <Collapse in={expandedIndex === i}>
+              <div className="mt-4 flex flex-col md:flex-row gap-5">
                 <img
                   src={item.thumbnail}
                   alt={item.title}
-                  className="w-full sm:w-48 h-28 object-cover rounded-md"
+                  className="w-full md:w-48 h-28 object-cover rounded-lg"
                 />
-
                 <div className="flex-1">
-                  <Typography
-                    variant="subtitle1"
-                    className="font-bold text-gray-800 dark:text-white"
-                  >
-                    {index + 1}. {item.title}
-                  </Typography>
-                  <Typography
-                    variant="body2"
-                    className="text-gray-600 dark:text-gray-300 mb-2"
-                  >
+                  <p className="text-sm text-gray-600 mb-2">
                     {item.description}
-                  </Typography>
-
-                  <div className="flex flex-wrap gap-3 items-center mb-2">
-                    {item.status === "completed" && (
-                      <Chip label="Completed" color="success" size="small" />
-                    )}
-                    {item.status === "in-progress" && (
-                      <Chip label="In Progress" color="warning" size="small" />
-                    )}
-                    {item.status === "locked" && (
-                      <Chip label="Locked" color="default" size="small" />
-                    )}
-
-                    {item.status !== "locked" && (
-                      <a
-                        href={item.videoUrl}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="text-blue-600 dark:text-blue-400 text-sm underline"
+                  </p>
+                  <div className="flex flex-wrap gap-4 text-sm">
+                    {item.videoUrl && item.status !== "locked" && (
+                      <button
+                        onClick={() => handleOpenVideoModal(item.videoUrl)}
+                        className="flex items-center gap-1 px-4 py-2 bg-purple-600 text-white rounded hover:bg-purple-700 transition-colors"
+                        type="button"
                       >
-                        Watch Lecture
-                      </a>
+                        Watch Video
+                      </button>
                     )}
-
                     {item.materialUrl && (
                       <a
                         href={item.materialUrl}
                         download
-                        className="text-sm text-green-600 underline flex items-center gap-1"
+                        className="flex items-center gap-1 px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700 transition-colors"
                       >
-                        <DownloadIcon fontSize="small" /> Download Materials
+                        <DownloadIcon fontSize="small" /> Download Material
                       </a>
                     )}
                   </div>
-
-                  {/* {item.status !== "locked" && (
-                    <FormControlLabel
-                      control={
-                        <Checkbox
-                          checked={item.isChecked}
-                          onChange={() => handleCheckboxToggle(index)}
-                          color="primary"
-                        />
-                      }
-                      label="Mark as Complete"
-                    />
-                  )} */}
                 </div>
               </div>
-            ))}
+            </Collapse>
+            <Dialog
+              open={videoModalOpen}
+              onClose={handleCloseVideoModal}
+              maxWidth="md"
+              fullWidth
+            >
+              <DialogTitle>🎬 Watch Lecture</DialogTitle>
+              <DialogContent dividers>
+                {activeVideoUrl && (
+                  <div className="aspect-video w-full">
+                    <iframe
+                      src={activeVideoUrl}
+                      title="Lecture Video"
+                      frameBorder="0"
+                      allow="autoplay; encrypted-media"
+                      allowFullScreen
+                      className="w-full h-[400px] rounded-lg"
+                    ></iframe>
+                  </div>
+                )}
+              </DialogContent>
+              <DialogActions>
+                <Button onClick={handleCloseVideoModal}>Close</Button>
+              </DialogActions>
+            </Dialog>
           </div>
-        </CardContent>
-      </Card>
+        ))}
+      </div>
     </div>
   );
-};
-
-export default CourseDetail;
+}

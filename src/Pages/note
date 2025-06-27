@@ -1,0 +1,27 @@
+💡for live class 
+ What You Can Add Later:
+Feature	Description
+Google Calendar Integration	Add to Google/Outlook/Apple Calendar.
+Email or Push Reminders	Notify 10 minutes before live.
+Feedback on Completed	Rate the session or give feedback.
+Zoom/Google Meet Link Logic	Support dynamic join links.
+Pagination or Infinite Scroll	For a large list of sessions.
+
+Would you like me to include calendar integration (Add to Calendar link)?
+
+
+
+✅ Filters: Today / This Week?
+
+✅ Reminder / Add to Calendar button?
+
+✅ Auto-scroll to ongoing or next session?
+
+
+| Feature                                   | Description                              |
+| ----------------------------------------- | ---------------------------------------- |
+| 🎯 **Live/Upcoming/Completed Tabs**       | More intuitive grouping (vs. mixing)     |
+| 📅 **iCal / Google Calendar Integration** | Add to calendar using a pre-filled URL   |
+| 🔔 **Local Notification Reminder**        | Use `Notification API` or email reminder |
+| 🔍 **Search Bar**                         | Filter sessions by title or instructor   |
+| 📁 **Recording Replay Button**            | For completed sessions, if applicable    |
