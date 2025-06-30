@@ -1,27 +1,37 @@
-import React from "react";
-import { Button, Chip } from "@mui/material";
-import ChatBubbleOutlineIcon from "@mui/icons-material/ChatBubbleOutline";
-import { Link } from "react-router-dom";
+import React, { useState } from "react";
+import ReplyModal from "./ReplyModal";
 
 const ForumPostCard = ({ post }) => {
+  const [showModal, setShowModal] = useState(false);
+  const [newReply, setNewReply] = useState("");
+
+  const handleAddReply = () => {
+    post.replies.push({ id: Date.now(), author: "You", text: newReply });
+    setNewReply("");
+    setShowModal(false);
+  };
+
   return (
-    <div className="bg-white p-5 rounded-xl shadow hover:shadow-md transition">
-      <h2 className="text-lg font-semibold text-gray-800 mb-1">{post.title}</h2>
-      <p className="text-sm text-gray-600 mb-2">Posted by: {post.author}</p>
-      <p className="text-sm text-gray-700 mb-3 line-clamp-2">{post.content}</p>
-      <div className="flex justify-between items-center">
-        <Chip
-          icon={<ChatBubbleOutlineIcon />}
-          label={`${post.replies} replies`}
-          color="primary"
-          size="small"
-        />
-        <Link to={`/forum/${post.id}`}>
-          <Button variant="outlined" size="small">
-            View Discussion
-          </Button>
-        </Link>
-      </div>
+    <div className="border p-6 rounded-xl shadow-lg bg-white transition hover:shadow-xl">
+      <h2 className="text-xl font-bold text-gray-900 mb-1">{post.title}</h2>
+      <p className="text-xs text-gray-400 mb-2">by {post.author}</p>
+      <p className="text-gray-700 mb-4">{post.content}</p>
+      <button
+        onClick={() => setShowModal(true)}
+        className="mt-2 text-blue-600 hover:underline text-sm font-medium"
+      >
+        {post.replies.length} Replies
+      </button>
+
+      {/* 🧩 Reusable Reply Modal */}
+      <ReplyModal
+        show={showModal}
+        onClose={() => setShowModal(false)}
+        post={post}
+        newReply={newReply}
+        setNewReply={setNewReply}
+        handleAddReply={handleAddReply}
+      />
     </div>
   );
 };

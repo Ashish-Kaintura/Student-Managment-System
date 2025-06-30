@@ -1,5 +1,15 @@
 import React from "react";
-import { List, ListItem, ListItemText, Divider, Typography } from "@mui/material";
+import {
+  List,
+  ListItem,
+  ListItemText,
+  Divider,
+  Typography,
+  Avatar,
+  Box,
+  Paper,
+} from "@mui/material";
+import NotificationsIcon from "@mui/icons-material/Notifications";
 
 const notifications = [
   { id: 1, text: "New assignment in Data Structures", time: "2 hrs ago" },
@@ -9,22 +19,51 @@ const notifications = [
 
 const Notifications = () => {
   return (
-    <div>
-      <h1 className="text-2xl font-bold text-gray-800 mb-6">Notifications</h1>
-      <List>
-        {notifications.map((note) => (
-          <div key={note.id}>
-            <ListItem alignItems="flex-start">
-              <ListItemText
-                primary={note.text}
-                secondary={<Typography variant="caption">{note.time}</Typography>}
-              />
-            </ListItem>
-            <Divider />
-          </div>
-        ))}
-      </List>
-    </div>
+    <Box sx={{ padding: 2, margin: 2 }}>
+      <Typography
+        variant="h4"
+        fontWeight={700}
+        color="primary"
+        gutterBottom
+        sx={{ textAlign: "start" }}
+      >
+        Notifications
+      </Typography>
+      <Paper elevation={3} sx={{ borderRadius: 3, overflow: "hidden" }}>
+        <List>
+          {notifications.map((note, idx) => (
+            <React.Fragment key={note.id}>
+              <ListItem
+                alignItems="flex-start"
+                sx={{
+                  bgcolor: idx % 2 === 0 ? "grey.50" : "background.paper",
+                  transition: "background 0.2s",
+                  "&:hover": { bgcolor: "primary.50" },
+                  py: 2,
+                }}
+              >
+                <Avatar sx={{ bgcolor: "primary.main", mr: 2 }}>
+                  <NotificationsIcon />
+                </Avatar>
+                <ListItemText
+                  primary={
+                    <Typography variant="subtitle1" fontWeight={600}>
+                      {note.text}
+                    </Typography>
+                  }
+                  secondary={
+                    <Typography variant="caption" color="text.secondary">
+                      {note.time}
+                    </Typography>
+                  }
+                />
+              </ListItem>
+              {idx < notifications.length - 1 && <Divider component="li" />}
+            </React.Fragment>
+          ))}
+        </List>
+      </Paper>
+    </Box>
   );
 };
 
